@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ theme.titre }} {% endblock %}
+
+{% block body %}
+<div class="theme-titre">
+    <div class="container">
+        <h1 class="text-center mt-3">Thème : {{ theme.titre }}</h1>
+        <h4 class="card-title text-center">{{theme.stitre}}</h4>
+        <p>{{ theme.description | raw }}</p>
+    </div>
+    <div class="container">
+        <h2 class="text-center">Listes des formations sur ce thème</h2>
+        <div class="row">
+            {% for i in 1..12 %}
+                <div class="col-md-4 border-dark">
+                    <div class="card  mb-3">
+                        <div class="card-header text-center">
+                            Formation {{ i }}
+                        </div>
+                        <div class="card-body ">
+                            <h4 class="card-title text-center">Description</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur aut at aspernatur, magni inventore asperiores quod voluptates tempore nam ipsa ab quis suscipit reprehenderit ratione facere numquam aliquid dicta officia.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        
+        </div>
+    </div>
+</div>
+{% endblock %}

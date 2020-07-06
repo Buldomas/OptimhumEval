@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos thèmes de formation{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mt-3">Nos principaux thèmes</h1>
+        <div class="row mt-5">
+            {% for theme in themes %}
+                <div class="col-md-4 border-dark">
+                    <div class="card  mb-3">
+                        <div class="card-header text-center">
+                            {{ theme.titre }}
+                        </div>
+                        <div class="card-body ">
+                            <h4 class="card-title text-center">{{theme.stitre}}</h4>
+                            <p class="card-text">{{ theme.description | raw}}</p>
+                        </div>
+                        <button class="btn btn-secondary">
+                        <a href="{{ path('theme_show',{'slug':theme.slug}) }}">Consulter</a>
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>    
+    </div>
+{% endblock %}
