@@ -2,12 +2,8 @@
 	text-align: left;
 }
 .logo img {
-	width: 100%;
-	max-width: 200px;
-}
-footer {
-	position: fixed;
-	bottom: 20px;
+	/*width: 100%;*/
+	max-width: 150px;
 }
 .row {
 	justify-content: space-evenly;

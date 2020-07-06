@@ -4,21 +4,37 @@
 
 {# Commentaires #}
 {% block body %}
-<div class="container-fluid">
-        <div class="logo">
-            <img src="Images/LOGO_OPTIMHUM_HD_base.gif" alt="Logo Optim'hum">
-        </div>
-</div>
-<div class="container-fluid ">
-        <h1 class="text-center">Bonjour</h1>
-        <h4 class="text-center">Vous êtes sur notre site d'évaluation des formations</h4>
-</div>
-<div class="row text-center mt-4">
-    <div class="col-md-6 text-center">
-        <a href="#">Répondre à mon questionnaire</a>
+<div class="container">
+    <div class="container">
+            <h1 class="text-center">Bonjour</h1>
+            <h4 class="text-center">Vous êtes sur notre site d'évaluation des formations</h4>
     </div>
-    <div class="col-md-6 text-center color">
-        <a href="#">Accèder à l'administration</a>
+    <div class="row text-center mt-4 mb-5">
+        <div class="col-md-4 text-center mb-3">
+            <button class="bt btn-primary">Répondre à mes questionnaires</button>
+        </div>
+        <div class="col-md-4 text-center color">
+            <button class="bt btn-primary">Accéder à l'administration</button>
+        </div>
+    </div>
+    <div class="container">
+        <h1 class="text-center">Nos différents thèmes</h1>
+        <div class="row mt-3">
+            {% for i in 1..3 %}
+                <div class="col-md-4">
+                    <div class="card bg-light mb-3">
+                        <div class="card-header text-center">
+                            Thème N° {{ i }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Description du thème {{ i }}</h4>
+                        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sequi molestias nulla consequuntur quia officiis, ipsum deserunt, possimus quidem totam sunt nesciunt mollitia repellendus neque expedita alias ab, qui voluptatibus recusandae?</p>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>    
     </div>
 </div>
 {% endblock %}
