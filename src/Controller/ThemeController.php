@@ -32,12 +32,8 @@ class ThemeController extends AbstractController
      * @Route("/themes/{slug}", name="theme_show")
      * @return Response
      */
-    public function show($slug, ThemeRepository $repo, ManagerRegistry $managerRegistry)
+    public function show(Theme $theme)
     {
-        $theme = $repo->findOneBySlug($slug);
-
-        $manager = $managerRegistry->getManager();
-
         return $this->render('theme/show.html.twig', [
             'theme' => $theme,
         ]);

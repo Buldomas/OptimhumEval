@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Theme;
+use App\Entity\Module;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -14,6 +15,33 @@ class AppFixtures extends Fixture
         // pensez à lancer php bin/console doctrine:fixtures:load
         $faker = Factory::create('FR-fr');
 
+        /* CREATION DES MODULES */
+        $titre = "Php";
+        $description = '<p>' . join('</p><p>', $faker->paragraphs(2)) . '</p>';
+        $module = new Module;
+        $module->setTitre($titre)
+            ->setStitre("Le PHP !")
+            ->setDescription($description);
+        $manager->persist($module);
+
+        $titre = "Javascript";
+        $description = '<p>' . join('</p><p>', $faker->paragraphs(2)) . '</p>';
+        $module = new Module;
+        $module->setTitre($titre)
+            ->setStitre("Le Javascript")
+            ->setDescription($description);
+        $manager->persist($module);
+
+        $titre = "CSS3";
+        $description = '<p>' . join('</p><p>', $faker->paragraphs(2)) . '</p>';
+        $module = new Module;
+        $module->setTitre($titre)
+            ->setStitre("La mise en forme avec CSS3")
+            ->setDescription($description);
+        $manager->persist($module);
+
+
+        /* CREATION DES THEMES */
         //Création du thème Web
         $titre = "Web";
         $description = '<p>' . join('</p><p>', $faker->paragraphs(3)) . '</p>';

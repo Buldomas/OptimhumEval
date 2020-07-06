@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les modules de formation{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mt-3">Nos Modules</h1>
+        <div class="row mt-5">
+            {% for module in modules %}
+                <div class="col-md-4 border-dark">
+                    <div class="card  mb-3">
+                        <div class="card-header text-center">
+                            {{ module.titre }}
+                        </div>
+                        <div class="card-body ">
+                            <h4 class="card-title text-center">{{module.stitre}}</h4>
+                            <p class="card-text">{{ module.description | raw}}</p>
+                        </div>
+                        <button class="btn btn-secondary">
+                        <a href="{{ path('module_show',{'slug':module.slug}) }}">Consulter</a>
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>    
+    </div>
+{% endblock %}
