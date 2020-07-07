@@ -1,23 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos thèmes de formation{% endblock %}
+{% block title %}Nos Formations{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1 class="text-center mt-3">Nos thèmes de formation</h1>
+        <h1 class="text-center mt-3">Nos Formations</h1>
         <div class="row mt-5">
-            {% for theme in themes %}
+            {% for formation in formations %}
                 <div class="col-md-4 border-dark">
                     <div class="card  mb-3">
                         <div class="card-header text-center">
-                            {{ theme.titre }}
+                            {{ formation.titre }}
                         </div>
                         <div class="card-body ">
-                            <h4 class="card-title text-center">{{theme.stitre}}</h4>
-                            <p class="card-text">{{ theme.description | raw}}</p>
+                            <h4 class="card-title text-center">{{formation.stitre}}</h4>
+                            <p class="card-text">{{ formation.description | raw}}</p>
                         </div>
                         <button class="btn btn-secondary">
-                        <a href="{{ path('theme_show',{'slug':theme.slug}) }}">Consulter</a>
+                        <a href="{{ path('formation_show',{'slug':formation.slug}) }}">Consulter</a>
                         </button>
                     </div>
                 </div>

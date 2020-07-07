@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Formation;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ThemeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
@@ -38,6 +41,16 @@ class Theme
      * @ORM\Column(type="string", length=255)
      */
     private $stitre;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Formation::class, mappedBy="theme")
+     */
+    private $formations;
+
+    public function __construct()
+    {
+        $this->formations = new ArrayCollection();
+    }
 
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
@@ -110,6 +123,37 @@ class Theme
     public function setStitre(string $stitre): self
     {
         $this->stitre = $stitre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Formation[]
+     */
+    public function getThemeFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addThemeFormation(Formation $formation): self
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations[] = $formation;
+            $formation->setTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeThemeFormation(Formation $formation): self
+    {
+        if ($this->formations->contains($formation)) {
+            $this->formations->removeElement($formation);
+            // set the owning side to null (unless already changed)
+            if ($formation->getTheme() === $this) {
+                $formation->setTheme(null);
+            }
+        }
 
         return $this;
     }

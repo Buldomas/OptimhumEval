@@ -2,18 +2,19 @@
 
 namespace App\Entity;
 
-use App\Entity\Formation;
+use App\Entity\Module;
+use App\Entity\Theme;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ModuleRepository;
+use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass=ModuleRepository::class)
+ * @ORM\Entity(repositoryClass=FormationRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
-class Module
+class Formation
 {
     /**
      * @ORM\Id()
@@ -28,9 +29,9 @@ class Module
     private $titre;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255)
      */
-    private $description;
+    private $stitre;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -38,19 +39,20 @@ class Module
     private $slug;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=theme::class, inversedBy="formations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $stitre;
+    private $theme;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="modules")
+     * @ORM\ManyToMany(targetEntity=module::class, inversedBy="formations")
      */
-    private $formations;
+    private $modules;
 
-    public function __construct()
-    {
-        $this->formations = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
 
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
@@ -74,6 +76,10 @@ class Module
     /***************************************************/
     /* FIN des Fonctions pour le HasLifecycleCallbacks */
     /***************************************************/
+    public function __construct()
+    {
+        $this->modules = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,14 +98,14 @@ class Module
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getStitre(): ?string
     {
-        return $this->description;
+        return $this->stitre;
     }
 
-    public function setDescription(string $description): self
+    public function setStitre(string $stitre): self
     {
-        $this->description = $description;
+        $this->stitre = $stitre;
 
         return $this;
     }
@@ -116,42 +122,52 @@ class Module
         return $this;
     }
 
-    public function getStitre(): ?string
+    public function getTheme(): ?theme
     {
-        return $this->stitre;
+        return $this->theme;
     }
 
-    public function setStitre(string $stitre): self
+    public function setTheme(?theme $theme): self
     {
-        $this->stitre = $stitre;
+        $this->theme = $theme;
 
         return $this;
     }
 
     /**
-     * @return Collection|Formation[]
+     * @return Collection|Module[]
      */
-    public function getFormations(): Collection
+    public function getModules(): Collection
     {
-        return $this->formations;
+        return $this->modules;
     }
 
-    public function addFormation(Formation $formation): self
+    public function addModule(Module $module): self
     {
-        if (!$this->formations->contains($formation)) {
-            $this->formations[] = $formation;
-            $formation->addModule($this);
+        if (!$this->modules->contains($module)) {
+            $this->modules[] = $module;
         }
 
         return $this;
     }
 
-    public function removeFormation(Formation $formation): self
+    public function removeModule(Module $module): self
     {
-        if ($this->formations->contains($formation)) {
-            $this->formations->removeElement($formation);
-            $formation->removeModule($this);
+        if ($this->modules->contains($module)) {
+            $this->modules->removeElement($module);
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

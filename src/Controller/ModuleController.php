@@ -37,6 +37,7 @@ class ModuleController extends AbstractController
 
         return $this->render('module/show.html.twig', [
             'module' => $module,
+            'formations' => $module->getFormations()
         ]);
     }
 }

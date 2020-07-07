@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ formation.titre }} {% endblock %}
+
+{% block body %}
+<div class="theme-titre">
+    <div class="container">
+        <h1 class="text-center mt-3">{{ formation.titre }}</h1>
+        <h4 class="card-title text-center">{{formation.stitre}}</h4>
+        <p>{{ formation.description | raw }}</p>
+    </div>
+    <div class="container">
+        <h4 class="text-center">Cette formation fait partie du thème "{{ theme.titre }}"</h4>
+        <div class="row">
+            <div class="col-md-6 border-dark text-center">
+                <button class="btn btn-secondary">
+                    <a href="{{ path('theme_show',{'slug':theme.slug}) }}">Voir le thème</a>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h4 class="text-center mb-3">Listes des modules de cette formation</h4>
+        <div class="row">
+            {% for module in modules %}
+                <div class="col-md-4 border-dark">
+                    <div class="card  mb-3">
+                        <div class="card-header text-center">
+                            {{ module.titre }}
+                        </div>
+                        <div class="card-body ">
+                            <h4 class="card-title text-center">{{ module.stitre }}</h4>
+                            <p class="card-text">{{ module.description | raw }}</p>
+                        </div>
+                    <button class="btn btn-secondary">
+                        <a href="{{ path('module_show',{'slug':module.slug}) }}">Consulter</a>
+                    </button>
+                    </div>
+                </div>
+            {% endfor %}
+        
+        </div>
+    </div>
+</div>
+{% endblock %}

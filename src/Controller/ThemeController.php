@@ -36,6 +36,7 @@ class ThemeController extends AbstractController
     {
         return $this->render('theme/show.html.twig', [
             'theme' => $theme,
+            'formations' => $theme->getThemeFormations()
         ]);
     }
 }

@@ -12,16 +12,19 @@
     <div class="container">
         <h2 class="text-center">Listes des formations sur ce thème</h2>
         <div class="row">
-            {% for i in 1..12 %}
+            {% for formation in formations %}
                 <div class="col-md-4 border-dark">
                     <div class="card  mb-3">
                         <div class="card-header text-center">
-                            Formation {{ i }}
+                            {{ formation.titre }}
                         </div>
                         <div class="card-body ">
-                            <h4 class="card-title text-center">Description</h4>
-                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur aut at aspernatur, magni inventore asperiores quod voluptates tempore nam ipsa ab quis suscipit reprehenderit ratione facere numquam aliquid dicta officia.</p>
+                            <h4 class="card-title text-center">{{ formation.stitre }}</h4>
+                            <p class="card-text">{{ formation.description | raw}}</p>
                         </div>
+                        <button class="btn btn-secondary">
+                            <a href="{{ path('formation_show',{'slug':formation.slug}) }}">Consulter</a>
+                        </button>
                     </div>
                 </div>
             {% endfor %}
