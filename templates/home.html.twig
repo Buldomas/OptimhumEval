@@ -24,6 +24,12 @@
             </div>
         {% endif %}
     </div>
+    {% else %}
+    <div class="row text-center mt-4 mb-5">
+        <h5>Vous nous connaissez et vous avez déjà un compte, alors n'hésitez pas&nbsp;
+        <a href="{{ path('account_login') }}" class="btn btn-primary">Connectez-vous !</a>
+        </h5>
+    </div>
     {% endif %}
     <div class="container">
         <h1 class="text-center">Nos différents thèmes</h1>
