@@ -20,7 +20,7 @@ class AdminFormationController extends AbstractController
      */
     public function index(FormationRepository $repo)
     {
-        return $this->render('/admin/formation/index.html.twig', [
+        return $this->render('admin/formation/index.html.twig', [
             'controller_name' => 'AdminFormationController',
             'formations' => $repo->findAll()
         ]);

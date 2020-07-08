@@ -20,7 +20,7 @@ class AdminModuleController extends AbstractController
      */
     public function index(ModuleRepository $repo)
     {
-        return $this->render('/admin/module/index.html.twig', [
+        return $this->render('admin/module/index.html.twig', [
             'controller_name' => 'AdminModuleController',
             'modules' => $repo->findAll()
         ]);
