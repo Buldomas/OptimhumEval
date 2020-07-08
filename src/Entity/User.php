@@ -99,6 +99,12 @@ class User implements UserInterface
      */
     private $userRoles;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Level::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $niv;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
@@ -359,6 +365,18 @@ class User implements UserInterface
             $this->userRoles->removeElement($userRole);
             $userRole->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getNiv(): ?Level
+    {
+        return $this->niv;
+    }
+
+    public function setNiv(?Level $niv): self
+    {
+        $this->niv = $niv;
 
         return $this;
     }

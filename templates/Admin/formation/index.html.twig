@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des formations{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="my-5">Gestion des formations</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-dark text-center">
+                <th scope="col">Titre</th>
+                <th scope="col">Sous Titre</th>
+                <th scope="col" class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for formation in formations %}
+            <tr>
+                <th scope "row">{{ formation.titre }}</th>
+                <td>{{ formation.stitre }}</td>
+                <td  class="text-right">
+                    <a href="#" class="btn btn-primary mb-1"><i class="fas fa-pen"></i></a>
+                    <a href="#" class="btn btn-success mb-1"><i class="fas fa-plus-square"></i></a>
+                    <a href="#" class="btn btn-danger mb-1"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

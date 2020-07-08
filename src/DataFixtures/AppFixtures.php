@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Theme;
 use App\Entity\Module;
 use App\Entity\Formation;
+use App\Entity\Level;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,8 +32,26 @@ class AppFixtures extends Fixture
         $manager->persist($adminRole);
 
         $formateurRole = new Role();
-        $formateurRole->setTitre('ROLE_FORMA');
+        $formateurRole->setTitre('ROLE_ADMIN');
         $manager->persist($formateurRole);
+
+        // Création des levels
+        $level0 = new Level;
+        $level0->setTitre("Administrateur")
+            ->setNiveau(0);
+        $manager->persist($level0);
+        $level1 = new Level;
+        $level1->setTitre("Formateur")
+            ->setNiveau(1);
+        $manager->persist($level1);
+        $level = new Level;
+        $level->setTitre("Administratif")
+            ->setNiveau(4);
+        $manager->persist($level);
+        $level = new Level;
+        $level->setTitre("Stagiaire")
+            ->setNiveau(10);
+        $manager->persist($level);
 
         // création des USERS */
 
@@ -42,6 +61,7 @@ class AppFixtures extends Fixture
             ->setNom("Soubigou")
             ->setEmail("laurent.soubigou@gmail.com")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->setNiv($level0)
             ->addUserRole($adminRole);
         $manager->persist($adminUser);
 
@@ -51,6 +71,7 @@ class AppFixtures extends Fixture
             ->setNom("Galas")
             ->setEmail("nicolas.galas@free.fr")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->setNiv($level0)
             ->addUserRole($adminRole);
         $manager->persist($adminUser);
 
@@ -60,6 +81,7 @@ class AppFixtures extends Fixture
             ->setNom("Ferrari")
             ->setEmail("guillaume.ferrari@gmail.com")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->setNiv($level1)
             ->addUserRole($formateurRole);
         $manager->persist($formateurUser);
 
@@ -70,6 +92,7 @@ class AppFixtures extends Fixture
             $user->setPrenom($faker->firstname)
                 ->setNom($faker->lastname)
                 ->setEmail($faker->email)
+                ->setNiv($level)
                 ->setHash($hash);
             $manager->persist($user);
         }

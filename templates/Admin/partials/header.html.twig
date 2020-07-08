@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="logo">
+        <a href="http://www.optimhum.net/" target=_blank>
+            <img src="/Images/LOGO_OPTIMHUM_HD_base.gif" alt="Logo Optim'hum">
+        </a>
+    </div>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('homepage') }}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin_themes_index') }}">Les Thèmes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin_formations_index') }}">Les Formations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin_modules_index') }}">Les Modules</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if app.user %}
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">
+                        {% if (app.user.picture is empty) %}
+                            {{app.user.fullName}}
+                        {% else %}
+                            <img src="{{app.user.picture}}" class="avatar avatar-mini" alt="Avatar de {{app.user.fullName}}">
+                            &nbsp;{{app.user.fullName}}
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                        <a href="{{ path('account_profile') }}" class="dropdown-item">Modifier mon profil</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('account_loggout') }}" class="dropdown-item">Déconnexion</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{{ path('account_login') }}" class="nav-link">Connexion</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{% for label, messages in app.flashes %}
+    <div class="container">
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message | raw }}
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
