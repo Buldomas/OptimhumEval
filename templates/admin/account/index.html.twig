@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="my-5">Gestion des Utilisateurs</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-dark text-center">
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Email</th>
+                <th scope="col">Level</th>
+                <th scope="col" class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                {% set niveau = user.getNiv().gettitre() %}
+                <tr>
+                    <th scope "row">{{ user.nom }}</th>
+                    <td>{{ user.prenom }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ niveau }}</td>
+                    <td  class="text-right">
+                        <a href="#" class="btn btn-primary mb-1"><i class="fas fa-pen"></i></a>
+                        <a href="#" class="btn btn-success mb-1"><i class="fas fa-plus-square"></i></a>
+                        <a href="#" class="btn btn-danger mb-1"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

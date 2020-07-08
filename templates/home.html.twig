@@ -16,11 +16,11 @@
     <div class="row text-center mt-4 mb-5">
         {% if niveau > 9 %}
             <div class="col-md-6 text-center mb-3">
-                <a path="#" class="btn btn-secondary">Répondre à mes questionnaires</a>
+                <a href="#" class="btn btn-secondary">Répondre à mes questionnaires</a>
             </div>
         {% else %}
             <div class="col-md-6 text-center color">
-                <a path="{{ path('admin_themes_index') }}" class="btn btn-secondary">Accéder à l'administration</a>
+                <a href="{{ path('admin_themes_index') }}" class="btn btn-secondary">Accéder à l'administration</a>
             </div>
         {% endif %}
     </div>
