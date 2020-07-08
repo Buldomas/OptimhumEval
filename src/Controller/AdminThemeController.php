@@ -20,7 +20,7 @@ class AdminThemeController extends AbstractController
      */
     public function index(ThemeRepository $repo)
     {
-        return $this->render('admin/theme/index.html.twig', [
+        return $this->render('/admin/theme/index.html.twig', [
             'controller_name' => 'AdminThemeController',
             'themes' => $repo->findAll()
         ]);
