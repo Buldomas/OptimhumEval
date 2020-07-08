@@ -2,39 +2,75 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Formation;
 use Faker\Factory;
+use App\Entity\Role;
+use App\Entity\User;
 use App\Entity\Theme;
 use App\Entity\Module;
-use App\Entity\User;
+use App\Entity\Formation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         // pensez à lancer php bin/console doctrine:fixtures:load
         $faker = Factory::create('FR-fr');
 
+        // création des roles
+        $adminRole = new Role();
+        $adminRole->setTitre('ROLE_ADMIN');
+        $manager->persist($adminRole);
+
+        $formateurRole = new Role();
+        $formateurRole->setTitre('ROLE_FORMA');
+        $manager->persist($formateurRole);
+
         // création des USERS */
-        $prenom = "Laurent";
-        $nom = "Soubigou";
-        $email = "laurent.soubigou@gmail.com";
-        $user = new User;
-        $user->setPrenom($prenom)
-            ->setNom($nom)
-            ->setEmail($email)
-            ->setHash('password');
-        $manager->persist($user);
+
+        // création de l'administrateur (Laurent Soubigou)
+        $adminUser = new User;
+        $adminUser->setPrenom("Laurent")
+            ->setNom("Soubigou")
+            ->setEmail("laurent.soubigou@gmail.com")
+            ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->addUserRole($adminRole);
+        $manager->persist($adminUser);
+
+        // création de l'administrateur (Nicolas Galas)
+        $adminUser = new User;
+        $adminUser->setPrenom("Nicolas")
+            ->setNom("Galas")
+            ->setEmail("nicolas.galas@free.fr")
+            ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->addUserRole($adminRole);
+        $manager->persist($adminUser);
+
+        // création d'un formateur (Guillaume Ferrari)
+        $formateurUser = new User;
+        $formateurUser->setPrenom("Guillaume")
+            ->setNom("Ferrari")
+            ->setEmail("guillaume.ferrari@gmail.com")
+            ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->addUserRole($formateurRole);
+        $manager->persist($formateurUser);
+
         /* création de 10 users aléatoires */
         for ($i = 1; $i <= 10; $i++) {
             $user = new User;
+            $hash = $this->encoder->encodePassword($user, 'password');
             $user->setPrenom($faker->firstname)
                 ->setNom($faker->lastname)
                 ->setEmail($faker->email)
-                ->setHash('password');
+                ->setHash($hash);
             $manager->persist($user);
         }
         /* CREATION DES MODULES */
@@ -139,16 +175,13 @@ class AppFixtures extends Fixture
             $formation->setTitre($titre)
                 ->setStitre("Devenir " . $titre)
                 ->setDescription($description)
-                ->setTheme($theme)
-                ->addModule($module);
-            $manager->persist($formation);
+                ->setTheme($theme);
             $nbmodule = mt_rand(0, 3);
             for ($j = 1; $j <= $nbmodule; $j++) {
                 $module = $modules[mt_rand(0, count($modules) - 1)];
                 $formation->addModule($module);
                 $module->addFormation($formation);
                 $manager->persist($module);
-                $manager->persist($formation);
             }
             $manager->persist($formation);
         }

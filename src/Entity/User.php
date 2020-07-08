@@ -3,16 +3,19 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use DateTime;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -91,6 +94,16 @@ class User
      */
     private $email2;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="users")
+     */
+    private $userRoles;
+
+    public function __construct()
+    {
+        $this->userRoles = new ArrayCollection();
+    }
+
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
     /*******************************************/
@@ -117,7 +130,10 @@ class User
     /***************************************************/
     /* FIN des Fonctions pour le HasLifecycleCallbacks */
     /***************************************************/
-
+    public function getFullName(): ?string
+    {
+        return $this->prenom . ' ' . $this->nom;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -287,6 +303,62 @@ class User
     public function setEmail2(?string $email2): self
     {
         $this->email2 = $email2;
+
+        return $this;
+    }
+    // function pour l'interface
+    public function getRoles()
+    {
+        // récupération des rôles de l'utilisateur
+        $roles = $this->userRoles->map(function ($role) {
+            return $role->getTitre();
+        })->toArray();
+        // Ajout du role_user pour tout le monde
+        $roles[] = 'ROLE_USER';
+        return $roles;
+    }
+
+    public function getPassword()
+    {
+        return $this->hash;
+    }
+    public function getSalt()
+    {
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getUserRoles(): Collection
+    {
+        return $this->userRoles;
+    }
+
+    public function addUserRole(Role $userRole): self
+    {
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles[] = $userRole;
+            $userRole->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(Role $userRole): self
+    {
+        if ($this->userRoles->contains($userRole)) {
+            $this->userRoles->removeElement($userRole);
+            $userRole->removeUser($this);
+        }
 
         return $this;
     }
