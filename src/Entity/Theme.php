@@ -31,13 +31,13 @@ class Theme
     /**
      * @ORM\Column(type="string", length=255)
      * 
-     * @Assert\Length(min="5", minMessage="Le titre doit faire au moins 5 caractères !")
+     * @Assert\Length(min="5", minMessage="Le titre doit faire au moins {{ min }} caractères !")
      */
     private $titre;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\Length(min="25", minMessage="La description doit faire au moins 25 caractères !")
+     * @Assert\Length(min="25", minMessage="La description doit faire au moins {{ min }} caractères !")
      */
     private $description;
 
@@ -48,7 +48,7 @@ class Theme
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min="10", minMessage="Le sous-titre doit faire au moins 10 caractères !")
+     * @Assert\Length(min="10", minMessage="Le sous-titre doit faire au moins {{ min }} caractères !")
      */
     private $stitre;
 

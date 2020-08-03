@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\QThemeRepository;
+use App\Repository\QModuleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ORM\Entity(repositoryClass=QThemeRepository::class)
+ * @ORM\Entity(repositoryClass=QModuleRepository::class)
  */
-class QTheme
+class QModule
 {
     /**
      * @ORM\Id()
@@ -26,7 +26,7 @@ class QTheme
     private $libelle;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default":5})
      * 
      * @Assert\Range(
      *      min = 0,
@@ -34,14 +34,18 @@ class QTheme
      *      notInRangeMessage = "La note doit être comprise entre {{ min }} et {{ max }} !"
      * )
      */
-    private $note;
+    private $note = 5;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity=module::class, inversedBy="qModules")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $theme;
+    private $module_id;
 
+    public function __construct()
+    {
+        $this->note = 5;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -64,21 +68,21 @@ class QTheme
         return $this->note;
     }
 
-    public function setNote(?int $note): self
+    public function setNote(int $note): self
     {
         $this->note = $note;
 
         return $this;
     }
 
-    public function getTheme(): ?Theme
+    public function getModuleId(): ?module
     {
-        return $this->theme;
+        return $this->module_id;
     }
 
-    public function setTheme(?Theme $theme): self
+    public function setModuleId(?module $module_id): self
     {
-        $this->theme = $theme;
+        $this->module_id = $module_id;
 
         return $this;
     }

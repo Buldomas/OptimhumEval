@@ -11,6 +11,7 @@
         {{ form_widget(form) }}
         
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        <a href="{{ path('homepage') }}" class="btn btn-secondary">Abandonner</a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

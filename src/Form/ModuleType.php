@@ -2,16 +2,16 @@
 
 namespace App\Form;
 
-use App\Entity\Theme;
-use App\Form\QThemeType;
+use App\Entity\Module;
+use App\Form\QModuleType;
 use App\Form\ApplicationType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class ThemeType extends ApplicationType
+class ModuleType extends ApplicationType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -32,10 +32,10 @@ class ThemeType extends ApplicationType
                 $this->getConfiguration("Description", "Description du thème ...")
             )
             ->add(
-                'questions',
+                'qModules',
                 CollectionType::class,
                 [
-                    'entry_type' => QThemeType::class,
+                    'entry_type' => QModuleType::class,
                     'allow_add' => true,
                     'allow_delete' => true
                 ]
@@ -45,7 +45,7 @@ class ThemeType extends ApplicationType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Theme::class,
+            'data_class' => Module::class,
         ]);
     }
 }

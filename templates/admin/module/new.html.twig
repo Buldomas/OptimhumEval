@@ -1,0 +1,33 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Création d'un Module{% endblock %}
+
+{% form_theme form 'admin/module/_collection.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mt-3">Création d'un Module</h1>
+
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+    </div>
+    <div class="row mt-3 text-center">
+        <div class="col-3"></div>
+        <div class="col-3">
+             <button type="submit" class="btn btn-primary">Valider la création</button>
+        </div>
+        <div class="col-3">
+            <a href="{{ path('admin_modules_index') }}" class="btn btn-secondary">Abandonner</a>
+        </div>
+         <div class="col-3"></div>
+    </div>
+    <div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="/js/module.js"></script>
+{% endblock %}

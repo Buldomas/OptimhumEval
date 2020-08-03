@@ -10,10 +10,18 @@ use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as AppAssert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *  fields={"email"},
+ *  message="Il y a déjà un utilisateur avec cette adresse !"
+ * )
  */
 class User implements UserInterface
 {
@@ -26,21 +34,31 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="vous devez renseigner votre prénom !")
+     * @Assert\Length(min="3", minMessage="Le prénom doit faire au moins {{ min }} caractères !")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="vous devez renseigner votre nom de famille !")
+     * @Assert\Length(min="2", minMessage="Le nom doit faire au moins {{ min }} caractères !")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(message="Veuillez renseigner un email valide !")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(
+     *     maxSize = "4M",
+     *     mimeTypes = {"image/png", "image/jpg"},
+     *     mimeTypesMessage = "Merci de charger un fichier image au format PNG ou JPG"
+     * )
      */
     private $picture;
 
@@ -66,6 +84,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
      */
     private $telephone;
 
@@ -91,6 +110,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Email(message="Veuillez renseigner un email valide !")
      */
     private $email2;
 
@@ -109,7 +129,6 @@ class User implements UserInterface
     {
         $this->userRoles = new ArrayCollection();
     }
-
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
     /*******************************************/
@@ -124,13 +143,20 @@ class User implements UserInterface
      */
     public function initializeData()
     {
-        if (empty($this->slug)) {
-            $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->prenom . ' ' . $this->nom);
+        $slugify = new Slugify();
+        $slug = $slugify->slugify($this->prenom . ' ' . $this->nom . ' ' . $this->email);
+        // Si le slug n'existe pas ou différent
+        if (empty($this->slug) || ($slug != $this->slug)) {
+            // mise à jour
+            $this->slug = $slug;
         }
         if (empty($this->getDateCreation())) {
             $date_create = new \DateTime('now');
             $this->setDateCreation($date_create);
+        }
+        // si mot de passe vide, on met par défaut "password"
+        if (empty($this->hash)) {
+            $this->setHash("password");
         }
     }
     /***************************************************/

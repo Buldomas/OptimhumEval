@@ -38,7 +38,7 @@ class AdminThemeController extends AbstractController
     /**
      * Permet d'editer un thème
      * 
-     * @Route("/admin/theme/edit/{slug}", name="admin_theme_edit")
+     * @Route("/admin/theme/{slug}/edit", name="admin_theme_edit")
      * @IsGranted("ROLE_ADMIN")
      * 
      * @param ThemeRepository $repo
@@ -47,11 +47,8 @@ class AdminThemeController extends AbstractController
      * 
      * @return Response
      */
-    public function edit($slug, ThemeRepository $repo, Request $request, ManagerRegistry $managerRegistry)
+    public function edit(Theme $theme, Request $request, ManagerRegistry $managerRegistry)
     {
-        $theme = $repo->findOneBy([
-            'slug' => $slug
-        ]);
         $form = $this->createForm(ThemeType::class, $theme);
         $form->handleRequest($request);
 

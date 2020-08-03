@@ -2,17 +2,25 @@
 
 namespace App\Entity;
 
-use App\Entity\Module;
 use App\Entity\Theme;
+use App\Entity\Module;
+use App\Entity\QFormation;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=FormationRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *  fields={"titre"},
+ *  message="Il y a déjà un thème avec ce titre !"
+ * )
  */
 class Formation
 {
@@ -25,11 +33,15 @@ class Formation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Length(min="5", minMessage="Le titre doit faire au moins {{ min }} caractères !")
      */
     private $titre;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Length(min="10", minMessage="Le sous-titre doit faire au moins {{ min }} caractères !")
      */
     private $stitre;
 
@@ -37,6 +49,12 @@ class Formation
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Assert\Length(min="25", minMessage="La description doit faire au moins {{ min }} caractères !")
+     */
+    private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity=theme::class, inversedBy="formations")
@@ -50,9 +68,10 @@ class Formation
     private $modules;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity=QFormation::class, mappedBy="formation", orphanRemoval=true)
      */
-    private $description;
+    private $qFormations;
+
 
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
@@ -79,6 +98,7 @@ class Formation
     public function __construct()
     {
         $this->modules = new ArrayCollection();
+        $this->qFormations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,7 +141,17 @@ class Formation
 
         return $this;
     }
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
     public function getTheme(): ?theme
     {
         return $this->theme;
@@ -160,14 +190,33 @@ class Formation
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return Collection|QFormation[]
+     */
+    public function getQFormations(): Collection
     {
-        return $this->description;
+        return $this->qFormations;
     }
 
-    public function setDescription(string $description): self
+    public function addQFormation(QFormation $qFormation): self
     {
-        $this->description = $description;
+        if (!$this->qFormations->contains($qFormation)) {
+            $this->qFormations[] = $qFormation;
+            $qFormation->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQFormation(QFormation $qFormation): self
+    {
+        if ($this->qFormations->contains($qFormation)) {
+            $this->qFormations->removeElement($qFormation);
+            // set the owning side to null (unless already changed)
+            if ($qFormation->getFormation() === $this) {
+                $qFormation->setFormation(null);
+            }
+        }
 
         return $this;
     }

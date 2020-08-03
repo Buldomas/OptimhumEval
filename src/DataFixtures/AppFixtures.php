@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private $encoder;
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
@@ -32,7 +33,7 @@ class AppFixtures extends Fixture
         $manager->persist($adminRole);
 
         $formateurRole = new Role();
-        $formateurRole->setTitre('ROLE_ADMIN');
+        $formateurRole->setTitre('ROLE_USER');
         $manager->persist($formateurRole);
 
         // Création des levels
@@ -80,7 +81,7 @@ class AppFixtures extends Fixture
         $formateurUser->setPrenom("Guillaume")
             ->setNom("Ferrari")
             ->setEmail("guillaume.ferrari@gmail.com")
-            ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->setHash($this->encoder->encodePassword($formateurUser, 'password'))
             ->setNiv($level1)
             ->addUserRole($formateurRole);
         $manager->persist($formateurUser);
@@ -93,6 +94,7 @@ class AppFixtures extends Fixture
                 ->setNom($faker->lastname)
                 ->setEmail($faker->email)
                 ->setNiv($level)
+                ->addUserRole($formateurRole)
                 ->setHash($hash);
             $manager->persist($user);
         }

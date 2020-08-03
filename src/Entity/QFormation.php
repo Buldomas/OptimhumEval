@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\QThemeRepository;
+use App\Repository\QFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
- * @ORM\Entity(repositoryClass=QThemeRepository::class)
+ * @ORM\Entity(repositoryClass=QFormationRepository::class)
  */
-class QTheme
+class QFormation
 {
     /**
      * @ORM\Id()
@@ -37,10 +36,10 @@ class QTheme
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity=formation::class, inversedBy="qFormations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $theme;
+    private $formation;
 
     public function getId(): ?int
     {
@@ -64,21 +63,21 @@ class QTheme
         return $this->note;
     }
 
-    public function setNote(?int $note): self
+    public function setNote(int $note): self
     {
         $this->note = $note;
 
         return $this;
     }
 
-    public function getTheme(): ?Theme
+    public function getFormation(): ?formation
     {
-        return $this->theme;
+        return $this->formation;
     }
 
-    public function setTheme(?Theme $theme): self
+    public function setFormation(?formation $formation): self
     {
-        $this->theme = $theme;
+        $this->formation = $formation;
 
         return $this;
     }

@@ -1,11 +1,10 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Modification d'un thème{% endblock %}
-{% form_theme form 'admin/theme/_collection.html.twig' %}
+{% block title %}Modification d'un utilisateur{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1 class="text-center mt-3">Modification du thème : {{ theme.titre }}</h1>
+        <h1 class="text-center mt-3">Modification de l'utilisateur : {{ user.getFullName() }}</h1>
 
         {{ form_start(form) }}
 
@@ -15,13 +14,9 @@
                 <button type="submit" class="btn btn-primary">Enregistrer les Modifications</button>
             </div>
             <div class="cols-6">
-                <a href="{{ path('admin_themes_index') }}" class="btn btn-secondary">Abandonner</a>
+                <a href="{{ path('admin_accounts_index') }}" class="btn btn-secondary">Abandonner</a>
             </div>
         </div>
         {{ form_end(form) }}
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script src="/js/theme.js"></script>
 {% endblock %}
