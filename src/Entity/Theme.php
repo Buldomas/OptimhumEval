@@ -63,10 +63,16 @@ class Theme
      */
     private $questions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="theme")
+     */
+    private $listQuestions;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->listQuestions = new ArrayCollection();
     }
 
     /*******************************************/
@@ -198,6 +204,37 @@ class Theme
             // set the owning side to null (unless already changed)
             if ($question->getTheme() === $this) {
                 $question->setTheme(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questions[]
+     */
+    public function getListQuestions(): Collection
+    {
+        return $this->listQuestions;
+    }
+
+    public function addListQuestion(Questions $listQuestion): self
+    {
+        if (!$this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions[] = $listQuestion;
+            $listQuestion->setTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListQuestion(Questions $listQuestion): self
+    {
+        if ($this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions->removeElement($listQuestion);
+            // set the owning side to null (unless already changed)
+            if ($listQuestion->getTheme() === $this) {
+                $listQuestion->setTheme(null);
             }
         }
 

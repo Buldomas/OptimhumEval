@@ -3,15 +3,12 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use DateTime;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Date;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraints as AppAssert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
@@ -125,9 +122,21 @@ class User implements UserInterface
      */
     private $niv;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="createur")
+     */
+    private $questionnaires;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="createur")
+     */
+    private $questions;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
+        $this->questionnaires = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
@@ -155,9 +164,10 @@ class User implements UserInterface
             $this->setDateCreation($date_create);
         }
         // si mot de passe vide, on met par défaut "password"
-        if (empty($this->hash)) {
+        /*        if (empty($this->hash)) {
             $this->setHash("password");
         }
+        */
     }
     /***************************************************/
     /* FIN des Fonctions pour le HasLifecycleCallbacks */
@@ -403,6 +413,68 @@ class User implements UserInterface
     public function setNiv(?Level $niv): self
     {
         $this->niv = $niv;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questionnaire[]
+     */
+    public function getQuestionnaires(): Collection
+    {
+        return $this->questionnaires;
+    }
+
+    public function addQuestionnaire(Questionnaire $questionnaire): self
+    {
+        if (!$this->questionnaires->contains($questionnaire)) {
+            $this->questionnaires[] = $questionnaire;
+            $questionnaire->setCreateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestionnaire(Questionnaire $questionnaire): self
+    {
+        if ($this->questionnaires->contains($questionnaire)) {
+            $this->questionnaires->removeElement($questionnaire);
+            // set the owning side to null (unless already changed)
+            if ($questionnaire->getCreateur() === $this) {
+                $questionnaire->setCreateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questions[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Questions $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setCreateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Questions $question): self
+    {
+        if ($this->questions->contains($question)) {
+            $this->questions->removeElement($question);
+            // set the owning side to null (unless already changed)
+            if ($question->getCreateur() === $this) {
+                $question->setCreateur(null);
+            }
+        }
 
         return $this;
     }

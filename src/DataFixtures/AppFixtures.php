@@ -5,13 +5,12 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\Level;
 use App\Entity\Theme;
 use App\Entity\Module;
 use App\Entity\Formation;
-use App\Entity\Level;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -39,11 +38,11 @@ class AppFixtures extends Fixture
         // Création des levels
         $level0 = new Level;
         $level0->setTitre("Administrateur")
-            ->setNiveau(0);
+            ->setNiveau(1);
         $manager->persist($level0);
         $level1 = new Level;
         $level1->setTitre("Formateur")
-            ->setNiveau(1);
+            ->setNiveau(2);
         $manager->persist($level1);
         $level = new Level;
         $level->setTitre("Administratif")
@@ -63,7 +62,8 @@ class AppFixtures extends Fixture
             ->setEmail("laurent.soubigou@gmail.com")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
             ->setNiv($level0)
-            ->addUserRole($adminRole);
+            ->addUserRole($adminRole)
+            ->addUserRole($formateurRole);
         $manager->persist($adminUser);
 
         // création de l'administrateur (Nicolas Galas)
@@ -73,7 +73,8 @@ class AppFixtures extends Fixture
             ->setEmail("nicolas.galas@free.fr")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
             ->setNiv($level0)
-            ->addUserRole($adminRole);
+            ->addUserRole($adminRole)
+            ->addUserRole($formateurRole);
         $manager->persist($adminUser);
 
         // création d'un formateur (Guillaume Ferrari)

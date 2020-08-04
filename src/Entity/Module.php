@@ -63,10 +63,16 @@ class Module
      */
     private $qModules;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="module")
+     */
+    private $listQuestions;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
         $this->qModules = new ArrayCollection();
+        $this->listQuestions = new ArrayCollection();
     }
 
     /*******************************************/
@@ -198,6 +204,37 @@ class Module
             // set the owning side to null (unless already changed)
             if ($qModule->getModuleId() === $this) {
                 $qModule->setModuleId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questions[]
+     */
+    public function getListQuestions(): Collection
+    {
+        return $this->listQuestions;
+    }
+
+    public function addListQuestion(Questions $listQuestion): self
+    {
+        if (!$this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions[] = $listQuestion;
+            $listQuestion->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListQuestion(Questions $listQuestion): self
+    {
+        if ($this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions->removeElement($listQuestion);
+            // set the owning side to null (unless already changed)
+            if ($listQuestion->getModule() === $this) {
+                $listQuestion->setModule(null);
             }
         }
 

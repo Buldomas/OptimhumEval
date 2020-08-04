@@ -72,6 +72,16 @@ class Formation
      */
     private $qFormations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="formation", orphanRemoval=true)
+     */
+    private $questionnaires;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Questions::class, mappedBy="formation")
+     */
+    private $listQuestions;
+
 
     /*******************************************/
     /* Fonctions pour le HasLifecycleCallbacks */
@@ -99,6 +109,8 @@ class Formation
     {
         $this->modules = new ArrayCollection();
         $this->qFormations = new ArrayCollection();
+        $this->questionnaires = new ArrayCollection();
+        $this->listQuestions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,6 +227,68 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($qFormation->getFormation() === $this) {
                 $qFormation->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questionnaire[]
+     */
+    public function getQuestionnaires(): Collection
+    {
+        return $this->questionnaires;
+    }
+
+    public function addQuestionnaire(Questionnaire $questionnaire): self
+    {
+        if (!$this->questionnaires->contains($questionnaire)) {
+            $this->questionnaires[] = $questionnaire;
+            $questionnaire->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestionnaire(Questionnaire $questionnaire): self
+    {
+        if ($this->questionnaires->contains($questionnaire)) {
+            $this->questionnaires->removeElement($questionnaire);
+            // set the owning side to null (unless already changed)
+            if ($questionnaire->getFormation() === $this) {
+                $questionnaire->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Questions[]
+     */
+    public function getListQuestions(): Collection
+    {
+        return $this->listQuestions;
+    }
+
+    public function addListQuestion(Questions $listQuestion): self
+    {
+        if (!$this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions[] = $listQuestion;
+            $listQuestion->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListQuestion(Questions $listQuestion): self
+    {
+        if ($this->listQuestions->contains($listQuestion)) {
+            $this->listQuestions->removeElement($listQuestion);
+            // set the owning side to null (unless already changed)
+            if ($listQuestion->getFormation() === $this) {
+                $listQuestion->setFormation(null);
             }
         }
 
